@@ -73,3 +73,12 @@ get_pictures=PythonOperator( # 파이썬 함수 호출을 위해 PythonOperator 
 # PythonOperator을 사용 시 다음 두가지 사항을 항상 적용해야함.
 # 1. 오퍼레이터 자신(get_pictures)를 정의해야함
 # 2. python_callable은 인수에 호출이 가능한 일반함수(_get_pictures) 가리킴
+
+
+notify=BashOperator(
+    task_id="notify",
+    bash_command='echo "There are now $(ls /tmp/images/ | wc -l) images."',
+    dag=dag,
+)
+
+download_launches >> get_pictures >> notify # 오퍼레이터 간의 의존성을 정의함. >> 연산자를 사용해 의존성을 정의함.
